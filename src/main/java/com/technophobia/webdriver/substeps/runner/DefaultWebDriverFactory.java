@@ -19,8 +19,8 @@
 
 package com.technophobia.webdriver.substeps.runner;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
+import java.lang.reflect.Field;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -28,11 +28,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.technophobia.webdriver.substeps.driver.phantomjs.WorkingPhantomJSDriverServiceFactory;
 
 public class DefaultWebDriverFactory implements WebDriverFactory {
 
@@ -82,6 +86,17 @@ public class DefaultWebDriverFactory implements WebDriverFactory {
 
                 webDriver = new InternetExplorerDriver(ieCapabilities);
                 break;
+            }
+            case PHANTOMJS: {
+            	// If using PhantomJS, make sure you set the webdriver.shutdown property to 'false'. Otherwise, the external
+            	// PhantomJS process gets killed after every scenario
+        		DesiredCapabilities capabilities = new DesiredCapabilities();
+            	capabilities.setJavascriptEnabled(true);
+            	
+            	PhantomJSDriverService driverService = WorkingPhantomJSDriverServiceFactory.createDefaultService(capabilities);
+            			
+            	webDriver = new PhantomJSDriver(driverService, capabilities);
+            	break;
             }
             default: {
                 throw new IllegalArgumentException("unknown driver type");

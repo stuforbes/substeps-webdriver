@@ -75,7 +75,7 @@ public enum WebdriverSubstepsConfiguration {
 
         HTMLUNIT_PROXY_HOST = Configuration.INSTANCE.getString("htmlunit.proxy.host");
         HTMLUNIT_PROXY_PORT = Configuration.INSTANCE.getInt("htmlunit.proxy.port");
-
+        
         try {
             WEBDRIVER_FACTORY_CLASS = Class.forName(Configuration.INSTANCE.getString("webdriver.factory.class")).asSubclass(WebDriverFactory.class);
         } catch (ClassNotFoundException ex) {
@@ -155,7 +155,7 @@ public enum WebdriverSubstepsConfiguration {
     public static Integer getHtmlUnitProxyPort() {
         return HTMLUNIT_PROXY_PORT;
     }
-
+    
     public static Class<? extends WebDriverFactory> getWebDriverFactoryClass() {
         return WEBDRIVER_FACTORY_CLASS;
     }
